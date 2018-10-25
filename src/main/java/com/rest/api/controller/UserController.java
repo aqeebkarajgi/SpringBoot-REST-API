@@ -1,30 +1,33 @@
 package com.rest.api.controller;
 
 import com.rest.api.entity.User;
+import com.rest.api.repository.UserRepository;
 import com.rest.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-//@RequestMapping("/users")
+@RequestMapping("/api")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
-    @RequestMapping("/users")
+    @GetMapping("/users")
     public List<User> findAllUsers() {
-        return userService.getAll();
+        return userRepository.findAll();
     }
 
-    @RequestMapping("/user")
-    public User findUser(@RequestParam String name) {
-        return userService.getByName(name);
+    @GetMapping(value="/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
+        return userRepository.findById(id)
+                .map(user -> ResponseEntity.ok().body(user))
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
 }
