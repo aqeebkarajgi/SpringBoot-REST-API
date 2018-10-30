@@ -34,7 +34,6 @@ public class UserController {
     @RequestMapping(method=RequestMethod.PUT, value="/users/update")
     public void updateUser(@RequestBody User user) {
         userRepository.save(user);
-//        userRepository.findById(id);
     }
 
     @DeleteMapping("/delete/{id}")
