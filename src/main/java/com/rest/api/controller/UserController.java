@@ -15,33 +15,31 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @GetMapping("/users")
+    @RequestMapping(method=RequestMethod.GET, value="/users")
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
-    @GetMapping("/users/{id}")
+    @RequestMapping(method=RequestMethod.GET, value="/users/{id}")
     public Optional<User> getUser(@PathVariable("id") String id) {
-        return this.userRepository.findById(id);
+        return userRepository.findById(id);
     }
 
-    @PutMapping("/add")
-    public void addUser(@RequestBody User user) {
-        this.userRepository.insert(user);
+    @RequestMapping(method=RequestMethod.POST, value="/users/add")
+    public User addUser(@RequestBody User user) {
+        userRepository.save(user);
+        return user;
     }
 
-    @PostMapping("/update")
+    @RequestMapping(method=RequestMethod.PUT, value="/users/update")
     public void updateUser(@RequestBody User user) {
-        this.userRepository.save(user);
+        userRepository.save(user);
+//        userRepository.findById(id);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable("id") String id) {
-        this.userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
 }
